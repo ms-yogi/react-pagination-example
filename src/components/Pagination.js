@@ -3,8 +3,17 @@ import React from 'react';
 const Pagination = (props) => {
 
     let pageArray = [];
+
+    if(props.posts.length === props.postsPerPage && props.currentPage > 0) {
+        pageArray.push("Prev")        
+    }
+
     for(let i=1; i <= Math.ceil(props.posts.length / props.postsPerPage); i++) {
         pageArray.push(i);
+    }
+
+    if(props.posts.length === props.postsPerPage) {
+        pageArray.push("Next");
     }
 
     return (

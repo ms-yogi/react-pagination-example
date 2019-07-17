@@ -1,51 +1,49 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import './App.css';
-import Posts from './components/Posts';
-import Pagination from './components/Pagination';
+import SimplePaginate from './components/SimplePaginate';
+import ApiPaginate from './components/ApiPaginate';
 
 class App extends Component {
   state = {
-    posts : [],
-    loading: false,
-    currentPage: 1,
-    postsPerPage: 10
+    simplePaginate: false,
+    apiPaginate: false
   }
 
-  componentDidMount() {
+  showSimplePaginate = () => {
     this.setState({
-      loading : true
+      simplePaginate: true,
+      apiPaginate: false
     })
-    const fetchPosts = async () => {
-      const res = await axios.get("https://jsonplaceholder.typicode.com/posts");
-      this.setState({
-        posts: res.data,
-        loading: false
-      })
-    }
+  }
 
-    fetchPosts();
-  } 
-
-  paginate = (pageNumber) => {
+  showApiPaginate = () => {
     this.setState({
-      currentPage : pageNumber
+      simplePaginate: false,
+      apiPaginate: true
     })
   }
 
   render() {
-    const endPosts = this.state.currentPage * this.state.postsPerPage;
-    const startPosts = endPosts - this.state.postsPerPage;
-    const showPosts = this.state.posts.slice(startPosts, endPosts);
-
     return (
       <div className="App container">
-        <h1>My Pagination App</h1>
-        <Posts loading={this.state.loading} posts={showPosts}/>
-        <Pagination 
-          postsPerPage={this.state.postsPerPage}
-          paginate={this.paginate} 
-          posts={this.state.posts}/>
+        <ul className="nav nav-tabs">
+          <li className="nav-item">
+            <button 
+                className="nav-link" 
+                onClick={this.showSimplePaginate} 
+                href="!#">Simple Pagination</button>
+          </li>
+          <li className="nav-item">
+            <button 
+                className="nav-link" 
+                onClick={this.showApiPaginate} 
+                href="!#">API Pagination</button>
+          </li>
+        </ul>
+        
+        {this.state.simplePaginate && <SimplePaginate/>}
+
+        {this.state.apiPaginate && <ApiPaginate/>}
       </div>
     );
   }
